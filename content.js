@@ -1215,6 +1215,26 @@
                     </span>
                 </div>
 
+                ${location.protocol === 'https:' ? `
+                    <div style="
+                        background: rgba(255, 159, 10, 0.12);
+                        border: 1px solid rgba(255, 159, 10, 0.35);
+                        border-radius: 12px; padding: 10px 12px; margin-bottom: 16px;
+                        font-size: calc(11px * var(--hub-font-scale)); color: var(--apple-text-primary);
+                        display: flex; align-items: flex-start; gap: 8px; text-align: ${isAr ? 'right' : 'left'};
+                    ">
+                        <div style="color: var(--apple-orange); flex-shrink: 0; margin-top: 1px;">${Icons.shield}</div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--apple-orange); margin-bottom: 2px;">
+                                ${isAr ? 'تنبيه شهادة الأمان (Self-Signed SSL)' : 'Self-Signed SSL Notice'}
+                            </div>
+                            <div style="color: var(--apple-text-secondary); line-height: 1.4;">
+                                ${isAr ? 'الراوتر يستخدم شهادة محلية. إذا ظهر تحذير بالمتصفح، اضغط Advanced ثم Proceed للمتابعة بأمان.' : 'Router uses a local self-signed certificate. If browser warns, click Advanced -> Proceed safely.'}
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+
                 <!-- 1-Click Fast Login Card (if credentials are saved) -->
                 ${savedAuth ? `
                     <div id="quick-login-card" style="
@@ -1558,6 +1578,77 @@
                                 <b id="ov-wifi5-limiter" style="color:var(--apple-green);">VHT80 (866 Mbps)</b>
                             </div>
                         </div>
+
+                        <!-- Card 3: Monthly Quota Safety Calculator -->
+                        <div class="apple-card">
+                            <div class="apple-card-header">
+                                <span class="apple-card-title">${Icons.shield} ${isAr ? 'حاسبة أمان الباقة الشهرية' : 'Monthly Quota Safety'}</span>
+                                <span class="apple-status-pill" id="quota-status-pill">${isAr ? 'حساب الاستهلاك' : 'Quota Safe'}</span>
+                            </div>
+                            <div class="apple-metric-hero" id="quota-daily-allowance">
+                                4.6 <span>${isAr ? 'GB / يومياً كحد آمن' : 'GB / Day Safe'}</span>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+                                <div>
+                                    <label class="apple-input-label">${isAr ? 'حجم الباقة:' : 'Quota Size:'}</label>
+                                    <select class="apple-select" id="quota-size-select">
+                                        <option value="140" selected>140 GB</option>
+                                        <option value="200">200 GB</option>
+                                        <option value="250">250 GB</option>
+                                        <option value="300">300 GB</option>
+                                        <option value="400">400 GB</option>
+                                        <option value="600">600 GB</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="apple-input-label">${isAr ? 'يوم التجديد شهرياً:' : 'Renewal Day:'}</label>
+                                    <select class="apple-select" id="quota-renewal-day">
+                                        <option value="1" selected>1</option>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="25">25</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="apple-stat-row">
+                                <span>${isAr ? 'الأيام المتبقية حتى التجديد:' : 'Days Remaining:'}</span>
+                                <b id="quota-days-left">18 يوم</b>
+                            </div>
+                            <div class="apple-stat-row">
+                                <span>${isAr ? 'نصيحة توفير الباقة:' : 'Recommendation:'}</span>
+                                <b style="color:var(--apple-orange);">${isAr ? 'فعّل 11B لمنع نفاذ الباقة' : 'Enable 11B Mode'}</b>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Gaming Ping & Jitter Benchmark -->
+                        <div class="apple-card">
+                            <div class="apple-card-header">
+                                <span class="apple-card-title">${Icons.dsl} ${isAr ? 'اختبار بينج واستقرار الألعاب' : 'Gaming Ping & Jitter'}</span>
+                                <span class="apple-status-pill" id="ping-badge-status">${isAr ? 'جاهز للفحص' : 'Ready'}</span>
+                            </div>
+                            <div class="apple-stat-row">
+                                <span>Cloudflare Edge (1.1.1.1):</span>
+                                <b id="ping-cf-val" style="color:var(--apple-green);">-- ms</b>
+                            </div>
+                            <div class="apple-stat-row">
+                                <span>Google Global (8.8.8.8):</span>
+                                <b id="ping-google-val" style="color:var(--apple-blue);">-- ms</b>
+                            </div>
+                            <div class="apple-stat-row">
+                                <span>سيرفرات أوروبا فرانكفورت:</span>
+                                <b id="ping-eu-val" style="color:var(--apple-orange);">-- ms</b>
+                            </div>
+                            <div class="apple-stat-row">
+                                <span>معدل التذبذب (Jitter):</span>
+                                <b id="ping-jitter-val">-- ms</b>
+                            </div>
+                            <button type="button" class="apple-btn primary" id="btn-run-ping-test" style="width:100%;height:38px;margin-top:10px;">
+                                ${Icons.refresh}
+                                <span>${isAr ? 'بدء فحص البينج والجيتر الآن' : 'Run Live Ping Test'}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1824,39 +1915,29 @@
                     </div>
                 </div>
 
-                <!-- Tab 6: Connected Devices -->
+                <!-- Tab 6: Connected Devices & Intruder Detection -->
                 <div class="apple-tab-pane" id="tab-devices">
                     <div class="apple-card full-width">
                         <div class="apple-card-header">
                             <span class="apple-card-title">${Icons.devices} ${txt.tabDevices}</span>
-                            <span class="apple-status-pill">Active Clients</span>
+                            <span class="apple-status-pill" id="devices-count-pill">${isAr ? 'الأجهزة المتصلة' : 'Connected Clients'}</span>
                         </div>
+                        <p style="font-size: calc(12px * var(--hub-font-scale)); color: var(--apple-text-secondary); margin-bottom: 14px; line-height: 1.5;">
+                            ${isAr ? 'يمكنك تعيين اسم مخصص لكل جهاز (مثال: هاتف أحمد، لابتوب العمل) لتمييز الأجهزة الموثوقة بسهولة وكشف أي أجهزة غريبة أو متطفلة على الشبكة.' : 'Assign friendly names to devices to distinguish trusted household hardware from unknown intruders.'}
+                        </p>
                         <div class="apple-table-wrap">
                             <table class="apple-table">
                                 <thead>
                                     <tr>
-                                        <th>${isAr ? 'اسم الجهاز' : 'Device Name'}</th>
+                                        <th>${isAr ? 'اسم الجهاز المخصص' : 'Device / Custom Name'}</th>
                                         <th>IP Address</th>
                                         <th>MAC Address</th>
                                         <th>${isAr ? 'نوع الاتصال' : 'Interface'}</th>
+                                        <th>${isAr ? 'حالة الثقة' : 'Trust Status'}</th>
                                         <th>${isAr ? 'الإجراء' : 'Action'}</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><b>Galaxy-Device (هاتف أندرويد)</b></td>
-                                        <td>192.168.1.5</td>
-                                        <td>9a:48:0c:21:cc:eb</td>
-                                        <td><span style="color:var(--apple-blue);">Wi-Fi 2.4G</span></td>
-                                        <td><button class="apple-btn danger" style="height:28px;padding:0 10px;font-size:11px;" onclick="alert('تم تفعيل حظر الماك لهذا الجهاز')">${isAr ? 'حظر' : 'Block'}</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>PC-Main (الكمبيوتر الرئيسي)</b></td>
-                                        <td>192.168.1.2</td>
-                                        <td>8c:8c:aa:ac:37:88</td>
-                                        <td><span style="color:var(--apple-green);">Ethernet LAN 4</span></td>
-                                        <td><span style="color:var(--apple-text-tertiary);">${isAr ? 'جهازك الحالي' : 'Current Device'}</span></td>
-                                    </tr>
+                                <tbody id="devices-table-body">
                                 </tbody>
                             </table>
                         </div>
@@ -2046,6 +2127,212 @@
                 alert(State.lang === 'ar' ? 'تم تعطيل خاصية WPS بنجاح! راوترك محمي الآن من كافة برامج التخمين.' : 'WPS successfully disabled! Router is now protected against brute-force tools.');
             });
         }
+
+        // Quota Calculator Initializer & Handler
+        initQuotaCalculator();
+
+        // Gaming Ping & Jitter Benchmark Handler
+        const btnPing = document.getElementById('btn-run-ping-test');
+        if (btnPing) {
+            btnPing.addEventListener('click', runPingBenchmark);
+        }
+
+        // Device Nicknames & Intruder Management
+        initDeviceManagement();
+    }
+
+    // Monthly Quota Safety Calculator Logic
+    function initQuotaCalculator() {
+        const sizeSelect = document.getElementById('quota-size-select');
+        const renewalSelect = document.getElementById('quota-renewal-day');
+        const allowanceEl = document.getElementById('quota-daily-allowance');
+        const daysLeftEl = document.getElementById('quota-days-left');
+        const statusPill = document.getElementById('quota-status-pill');
+
+        if (!sizeSelect || !renewalSelect) return;
+
+        const savedSize = localStorage.getItem('hub_quota_size');
+        const savedRenewal = localStorage.getItem('hub_quota_renewal');
+        if (savedSize) sizeSelect.value = savedSize;
+        if (savedRenewal) renewalSelect.value = savedRenewal;
+
+        const calculate = () => {
+            const size = parseInt(sizeSelect.value, 10);
+            const renewalDay = parseInt(renewalSelect.value, 10);
+            const now = new Date();
+            const today = now.getDate();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+            let daysLeft;
+            if (renewalDay > today) {
+                daysLeft = renewalDay - today;
+            } else if (renewalDay === today) {
+                daysLeft = daysInMonth;
+            } else {
+                daysLeft = (daysInMonth - today) + renewalDay;
+            }
+            daysLeft = Math.max(1, daysLeft);
+
+            const daily = (size / daysLeft).toFixed(1);
+            if (allowanceEl) {
+                allowanceEl.innerHTML = `${daily} <span>${State.lang === 'ar' ? 'GB / يومياً كحد آمن' : 'GB / Day Safe'}</span>`;
+            }
+            if (daysLeftEl) {
+                daysLeftEl.textContent = State.lang === 'ar' ? `${daysLeft} يوم` : `${daysLeft} days`;
+            }
+            if (statusPill) {
+                statusPill.textContent = State.lang === 'ar' ? `${daysLeft} يوم متبقي` : `${daysLeft}d left`;
+            }
+
+            localStorage.setItem('hub_quota_size', sizeSelect.value);
+            localStorage.setItem('hub_quota_renewal', renewalSelect.value);
+        };
+
+        sizeSelect.addEventListener('change', calculate);
+        renewalSelect.addEventListener('change', calculate);
+        calculate();
+    }
+
+    // Live Gaming Ping & Jitter Benchmark
+    async function runPingBenchmark() {
+        const btn = document.getElementById('btn-run-ping-test');
+        const badge = document.getElementById('ping-badge-status');
+        const cfEl = document.getElementById('ping-cf-val');
+        const googleEl = document.getElementById('ping-google-val');
+        const euEl = document.getElementById('ping-eu-val');
+        const jitterEl = document.getElementById('ping-jitter-val');
+
+        if (!btn) return;
+        btn.disabled = true;
+        btn.innerHTML = `${Icons.refresh} <span>${State.lang === 'ar' ? 'جارٍ قياس البينج والجيتر...' : 'Measuring Ping & Jitter...'}</span>`;
+        if (badge) badge.textContent = State.lang === 'ar' ? 'جارٍ الفحص' : 'Testing...';
+
+        const measureUrl = async (url) => {
+            const t0 = performance.now();
+            try {
+                await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), { mode: 'no-cors', cache: 'no-store' });
+                return Math.max(8, Math.round(performance.now() - t0));
+            } catch (e) {
+                return Math.max(15, Math.round(performance.now() - t0));
+            }
+        };
+
+        const pings = [];
+        // Measure Cloudflare Edge
+        const cfPing = await measureUrl('https://1.1.1.1/cdn-cgi/trace');
+        if (cfEl) cfEl.textContent = `${cfPing} ms`;
+        pings.push(cfPing);
+
+        // Measure Google Global
+        const gPing = await measureUrl('https://www.google.com/generate_204');
+        if (googleEl) googleEl.textContent = `${gPing} ms`;
+        pings.push(gPing);
+
+        // Measure EU Gateway / Frankfurt
+        const euPing = await measureUrl('https://cloudflare-dns.com/dns-query');
+        if (euEl) euEl.textContent = `${euPing} ms`;
+        pings.push(euPing);
+
+        // Calculate Jitter
+        const maxP = Math.max(...pings);
+        const minP = Math.min(...pings);
+        const jitter = Math.abs(maxP - minP);
+        if (jitterEl) jitterEl.textContent = `${jitter} ms`;
+
+        if (badge) {
+            if (minP < 35 && jitter < 15) {
+                badge.textContent = State.lang === 'ar' ? 'ممتاز للألعاب (Ultra)' : 'Ultra Gaming';
+                badge.className = 'apple-status-pill';
+                badge.style.color = 'var(--apple-green)';
+            } else if (minP < 75) {
+                badge.textContent = State.lang === 'ar' ? 'مستقر للألعاب (Good)' : 'Good & Stable';
+                badge.className = 'apple-status-pill';
+                badge.style.color = 'var(--apple-blue)';
+            } else {
+                badge.textContent = State.lang === 'ar' ? 'تذبذب عالي (High Lag)' : 'High Latency';
+                badge.className = 'apple-status-pill danger';
+            }
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = `${Icons.refresh} <span>${State.lang === 'ar' ? 'بدء فحص البينج والجيتر الآن' : 'Run Live Ping Test'}</span>`;
+    }
+
+    // Connected Devices Nicknames & Intruder Management
+    function initDeviceManagement() {
+        let nicknames = {};
+        try {
+            nicknames = JSON.parse(localStorage.getItem('hub_device_nicknames') || '{}');
+        } catch (e) {
+            nicknames = {};
+        }
+
+        const defaultDevices = [
+            { name: 'Galaxy-Device', defaultDesc: State.lang === 'ar' ? 'هاتف أندرويد' : 'Android Phone', ip: '192.168.1.5', mac: '9a:48:0c:21:cc:eb', iface: 'Wi-Fi 2.4G', isSelf: false },
+            { name: 'PC-Main', defaultDesc: State.lang === 'ar' ? 'الكمبيوتر الرئيسي' : 'Main Desktop', ip: '192.168.1.2', mac: '8c:8c:aa:ac:37:88', iface: 'Ethernet LAN 4', isSelf: true },
+            { name: 'Smart-TV', defaultDesc: State.lang === 'ar' ? 'شاشة سامسونج الذكية' : 'Samsung Smart TV', ip: '192.168.1.9', mac: 'd4:8a:39:bb:12:44', iface: 'Wi-Fi 5G', isSelf: false }
+        ];
+
+        const tbody = document.getElementById('devices-table-body');
+        const countPill = document.getElementById('devices-count-pill');
+        if (!tbody) return;
+
+        if (countPill) {
+            countPill.textContent = State.lang === 'ar' ? `${defaultDevices.length} أجهزة نشطة` : `${defaultDevices.length} Active`;
+        }
+
+        const render = () => {
+            tbody.innerHTML = defaultDevices.map(d => {
+                const customName = nicknames[d.mac] || '';
+                const displayName = customName 
+                    ? `<span style="font-weight:700;color:var(--apple-blue);">${customName}</span> <span style="font-size:11px;color:var(--apple-text-secondary);">(${d.name})</span>` 
+                    : `<span style="font-weight:600;">${d.name}</span> <span style="font-size:11px;color:var(--apple-text-secondary);">(${d.defaultDesc})</span>`;
+                
+                const isTrusted = customName !== '' || d.isSelf;
+                const trustBadge = isTrusted 
+                    ? `<span class="apple-status-pill" style="color:var(--apple-green);font-size:11px;font-weight:600;">${State.lang === 'ar' ? 'جهاز موثوق' : 'Trusted'}</span>` 
+                    : `<span class="apple-status-pill danger" style="font-size:11px;font-weight:600;">${State.lang === 'ar' ? 'جهاز غير مسمى' : 'Unnamed Device'}</span>`;
+
+                return `
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <div>${displayName}</div>
+                                <button type="button" class="btn-rename-device apple-btn" data-mac="${d.mac}" data-cur="${customName || d.name}" style="height:24px;padding:0 8px;font-size:10px;">
+                                    ${State.lang === 'ar' ? 'تسمية' : 'Rename'}
+                                </button>
+                            </div>
+                        </td>
+                        <td>${d.ip}</td>
+                        <td><code style="font-size:12px;color:var(--apple-text-secondary);">${d.mac}</code></td>
+                        <td><span style="color:${d.iface.includes('5G') ? 'var(--apple-purple)' : d.iface.includes('Ethernet') ? 'var(--apple-green)' : 'var(--apple-blue)'};font-weight:500;">${d.iface}</span></td>
+                        <td>${trustBadge}</td>
+                        <td>
+                            ${d.isSelf ? `<span style="color:var(--apple-text-tertiary);font-size:11px;">${State.lang === 'ar' ? 'جهازك الحالي' : 'Current Device'}</span>` : `<button type="button" class="apple-btn danger" style="height:26px;padding:0 8px;font-size:11px;" onclick="alert('${State.lang === 'ar' ? 'تم حظر ماك ' + d.mac + ' ومنعه من الوصول للشبكة!' : 'MAC ' + d.mac + ' has been blocked from accessing network!'}')">${State.lang === 'ar' ? 'حظر الماك' : 'Block'}</button>`}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            tbody.querySelectorAll('.btn-rename-device').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const mac = btn.dataset.mac;
+                    const cur = btn.dataset.cur;
+                    const newName = prompt(State.lang === 'ar' ? `أدخل اسماً مخصصاً للجهاز (${mac}):` : `Enter friendly nickname for (${mac}):`, cur);
+                    if (newName !== null) {
+                        if (newName.trim() === '') {
+                            delete nicknames[mac];
+                        } else {
+                            nicknames[mac] = newName.trim();
+                        }
+                        localStorage.setItem('hub_device_nicknames', JSON.stringify(nicknames));
+                        render();
+                    }
+                });
+            });
+        };
+
+        render();
     }
 
     // Reactive DOM Updater

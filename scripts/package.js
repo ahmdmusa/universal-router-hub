@@ -30,8 +30,10 @@ console.log(`📌 Packaging Version: v${manifest.version}`);
 // Files & folders to copy to packages
 const COMMON_ITEMS = [
   'content.js',
+  'background.js',
   'icons',
   'popup',
+  'welcome',
   'LICENSE',
   'README.md'
 ];

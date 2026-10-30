@@ -91,7 +91,7 @@ if (manifest) {
 }
 
 // 2. Validate JS Syntax
-const jsFilesToCheck = ['content.js', 'popup/popup.js'];
+const jsFilesToCheck = ['content.js', 'background.js', 'popup/popup.js'];
 for (const relFile of jsFilesToCheck) {
   const filePath = path.join(ROOT_DIR, relFile);
   if (fs.existsSync(filePath)) {

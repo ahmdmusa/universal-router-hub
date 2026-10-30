@@ -12,6 +12,9 @@
   "permissions": [
     "storage"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "host_permissions": [
     "http://192.168.1.1/*",
     "https://192.168.1.1/*",

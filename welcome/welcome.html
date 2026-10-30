@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مرحباً بك في Universal Router Hub</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap">
+    <style>
+        :root {
+            --apple-bg: #000000;
+            --apple-card-bg: rgba(28, 28, 30, 0.75);
+            --apple-border: rgba(255, 255, 255, 0.12);
+            --apple-text-primary: #f5f5f7;
+            --apple-text-secondary: #86868b;
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-green: #34c759;
+            --apple-orange: #ff9500;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --apple-bg: #f5f5f7;
+                --apple-card-bg: rgba(255, 255, 255, 0.85);
+                --apple-border: rgba(0, 0, 0, 0.08);
+                --apple-text-primary: #1d1d1f;
+                --apple-text-secondary: #86868b;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Cairo", sans-serif;
+        }
+
+        body {
+            background: var(--apple-bg);
+            color: var(--apple-text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .welcome-card {
+            width: 100%;
+            max-width: 640px;
+            background: var(--apple-card-bg);
+            border: 1px solid var(--apple-border);
+            border-radius: 24px;
+            padding: 40px 32px;
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 18px;
+            border-radius: 18px;
+            background: linear-gradient(145deg, var(--apple-blue), #0a84ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0, 113, 227, 0.4);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.4px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: var(--apple-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-bottom: 32px;
+            text-align: right;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--apple-border);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .step-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(0, 113, 227, 0.15);
+            color: var(--apple-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--apple-text-primary);
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: var(--apple-text-secondary);
+            line-height: 1.5;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--apple-blue);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 113, 227, 0.35);
+            transition: all 0.2s;
+        }
+
+        .cta-btn:hover {
+            background: var(--apple-blue-hover);
+            transform: translateY(-1px);
+        }
+
+        .cta-btn:active {
+            transform: scale(0.98);
+        }
+
+        .footer-note {
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--apple-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .footer-note a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .footer-note a:hover {
+            color: var(--apple-blue);
+        }
+
+        .coffee-link {
+            color: var(--apple-blue) !important;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-card">
+        <div class="hero-badge">
+            <svg viewBox="0 0 24 24" width="34" height="34" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="14" width="20" height="8" rx="3"></rect>
+                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                <line x1="10" y1="18" x2="10.01" y2="18"></line>
+                <line x1="14" y1="18" x2="14.01" y2="18"></line>
+                <line x1="6" y1="10" x2="6" y2="14"></line>
+                <line x1="18" y1="10" x2="18" y2="14"></line>
+            </svg>
+        </div>
+
+        <h1>تم تثبيت Universal Router Hub بنجاح</h1>
+        <p class="hero-subtitle">
+            لوحة التحكم العصرية الموحدة لجميع راوترات مصر والشرق الأوسط أصبحت جاهزة للاستخدام الآن على متصفحك.
+        </p>
+
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <div>
+                    <div class="step-title">1. التفعيل التلقائي الفوري</div>
+                    <div class="step-desc">بمجرد زيارة عنوان راوترك (192.168.1.1)، سيتم كشف نوع وموديل الراوتر وتحويل الواجهة القديمة إلى التصميم الزجاجي فوراً.</div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <div>
+                    <div class="step-title">2. حماية باقة الإنترنت (محدد السرعة 11B)</div>
+                    <div class="step-desc">استخدم نمط 11B Only لتقييد سرعة التنزيل عند ~5 Mbps لمنع الفيديوهات عالية الدقة وتيك توك من استنزاف باقة الشهر.</div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <div>
+                    <div class="step-title">3. حماية العائلة وفلترة الـ DNS</div>
+                    <div class="step-desc">تفعيل فلتر Cloudflare 1.1.1.3 لحجب المحتوى الضار، الاحتيالي، والمواقع الإباحية على جميع الهواتف والأجهزة المتصلة.</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="cta-btn" id="btn-go-router">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <span>الانتقال إلى صفحة الراوتر (192.168.1.1)</span>
+        </button>
+
+        <div class="footer-note">
+            <a href="https://github.com/ahmdmusa" target="_blank" rel="noopener">مطور الأداة: @ahmdmusa</a>
+            <span>•</span>
+            <a href="https://www.paypal.com/ncp/payment/4SWPEP8Q3YF78" target="_blank" rel="noopener" class="coffee-link">☕ Buy Me a Coffee</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('btn-go-router').addEventListener('click', () => {
+            window.location.href = 'http://192.168.1.1/';
+        });
+    </script>
+</body>
+</html>

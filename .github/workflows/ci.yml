@@ -1,0 +1,47 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-and-build:
+    name: Validate & Package Extension
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Run Extension Validation
+        run: node scripts/validate.js
+
+      - name: Build Distribution Packages
+        run: node scripts/package.js
+
+      - name: Verify Checksums
+        run: |
+          cat dist/SHA256SUMS.txt
+          cd dist && sha256sum -c SHA256SUMS.txt
+
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-router-hub-packages
+          path: dist/*.zip
+          retention-days: 7

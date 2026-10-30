@@ -1,0 +1,250 @@
+name: Multi-Platform Release & Deployment
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (validate and build without publishing to stores)'
+        required: true
+        type: boolean
+        default: false
+      publish_chrome:
+        description: 'Publish to Chrome Web Store'
+        required: true
+        type: boolean
+        default: true
+      publish_firefox:
+        description: 'Publish to Firefox Add-ons (AMO)'
+        required: true
+        type: boolean
+        default: true
+      publish_edge:
+        description: 'Publish to Microsoft Edge Add-ons'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-package:
+    name: Build & Package Extension
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      chrome_zip: ${{ steps.get-files.outputs.chrome_zip }}
+      firefox_zip: ${{ steps.get-files.outputs.firefox_zip }}
+      edge_zip: ${{ steps.get-files.outputs.edge_zip }}
+      universal_zip: ${{ steps.get-files.outputs.universal_zip }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Validate Extension
+        run: node scripts/validate.js
+
+      - name: Build Distribution Packages
+        run: node scripts/package.js
+
+      - name: Extract Metadata & Artifact Paths
+        id: get-files
+        run: |
+          CHROME_ZIP=$(ls dist/universal-router-hub-chrome-*.zip)
+          FIREFOX_ZIP=$(ls dist/universal-router-hub-firefox-*.zip)
+          EDGE_ZIP=$(ls dist/universal-router-hub-edge-*.zip)
+          UNIVERSAL_ZIP=$(ls dist/universal-router-hub-v*.zip)
+          echo "chrome_zip=$CHROME_ZIP" >> $GITHUB_OUTPUT
+          echo "firefox_zip=$FIREFOX_ZIP" >> $GITHUB_OUTPUT
+          echo "edge_zip=$EDGE_ZIP" >> $GITHUB_OUTPUT
+          echo "universal_zip=$UNIVERSAL_ZIP" >> $GITHUB_OUTPUT
+
+      - name: Extract Version
+        id: get-version
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-dist
+          path: dist/
+          retention-days: 14
+
+  github-release:
+    name: GitHub Release
+    needs: build-and-package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-dist
+          path: dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Universal Router Hub v${{ needs.build-and-package.outputs.version }}"
+          body: |
+            ## 🌐 Universal Router Hub (NextGen Dashboard) v${{ needs.build-and-package.outputs.version }}
+            
+            لوحة تحكم عصرية موحدة وسريعة لجميع راوترات مصر والشرق الأوسط مع كشف تلقائي وحماية DNS وتحديد السرعة.
+            Universal modern dashboard and controller for routers in Egypt & the Middle East.
+
+            ### 📦 Download Packages / حزم التثبيت:
+            - **Universal Package (All Browsers):** `universal-router-hub-v${{ needs.build-and-package.outputs.version }}.zip`
+            - **Google Chrome & Brave:** `universal-router-hub-chrome-v${{ needs.build-and-package.outputs.version }}.zip`
+            - **Mozilla Firefox (Desktop & Android):** `universal-router-hub-firefox-v${{ needs.build-and-package.outputs.version }}.zip`
+            - **Microsoft Edge:** `universal-router-hub-edge-v${{ needs.build-and-package.outputs.version }}.zip`
+
+            ### 🔒 Verification Checksums:
+            Check `SHA256SUMS.txt` attached below for package integrity verification.
+          files: |
+            dist/*.zip
+            dist/SHA256SUMS.txt
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+
+  publish-chrome:
+    name: Deploy to Chrome Web Store
+    needs: build-and-package
+    runs-on: ubuntu-latest
+    if: |
+      always() &&
+      needs.build-and-package.result == 'success' &&
+      (github.event.inputs.publish_chrome != 'false') &&
+      (github.event.inputs.dry_run != 'true')
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-dist
+          path: dist/
+
+      - name: Check Chrome Web Store Credentials
+        id: check-creds
+        run: |
+          if [ -n "${{ secrets.CHROME_CLIENT_ID }}" ] && [ -n "${{ secrets.CHROME_CLIENT_SECRET }}" ] && [ -n "${{ secrets.CHROME_REFRESH_TOKEN }}" ] && [ -n "${{ secrets.CHROME_EXTENSION_ID }}" ]; then
+            echo "has_creds=true" >> $GITHUB_OUTPUT
+            echo "✅ Chrome Web Store secrets found."
+          else
+            echo "has_creds=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Chrome Web Store secrets not configured. Skipping automated upload."
+            echo "💡 Add secrets: CHROME_CLIENT_ID, CHROME_CLIENT_SECRET, CHROME_REFRESH_TOKEN, CHROME_EXTENSION_ID"
+          fi
+
+      - name: Upload & Publish to Chrome Web Store
+        if: steps.check-creds.outputs.has_creds == 'true'
+        uses: mnao305/chrome-extension-upload@v5.0.0
+        with:
+          file-path: ${{ needs.build-and-package.outputs.chrome_zip }}
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          publish: true
+
+  publish-firefox:
+    name: Deploy to Mozilla Firefox (AMO)
+    needs: build-and-package
+    runs-on: ubuntu-latest
+    if: |
+      always() &&
+      needs.build-and-package.result == 'success' &&
+      (github.event.inputs.publish_firefox != 'false') &&
+      (github.event.inputs.dry_run != 'true')
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-dist
+          path: dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check Firefox AMO Credentials
+        id: check-creds
+        run: |
+          if [ -n "${{ secrets.FIREFOX_API_KEY }}" ] && [ -n "${{ secrets.FIREFOX_API_SECRET }}" ]; then
+            echo "has_creds=true" >> $GITHUB_OUTPUT
+            echo "✅ Firefox AMO secrets found."
+          else
+            echo "has_creds=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Firefox AMO secrets not configured. Skipping automated upload."
+            echo "💡 Add secrets: FIREFOX_API_KEY, FIREFOX_API_SECRET"
+          fi
+
+      - name: Sign & Submit to Firefox Add-ons
+        if: steps.check-creds.outputs.has_creds == 'true'
+        run: |
+          npx web-ext sign \
+            --channel=listed \
+            --source-dir=dist/.staging-firefox \
+            --api-key="${{ secrets.FIREFOX_API_KEY }}" \
+            --api-secret="${{ secrets.FIREFOX_API_SECRET }}"
+
+  publish-edge:
+    name: Deploy to Microsoft Edge Add-ons
+    needs: build-and-package
+    runs-on: ubuntu-latest
+    if: |
+      always() &&
+      needs.build-and-package.result == 'success' &&
+      (github.event.inputs.publish_edge != 'false') &&
+      (github.event.inputs.dry_run != 'true')
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-dist
+          path: dist/
+
+      - name: Check Microsoft Edge Credentials
+        id: check-creds
+        run: |
+          if [ -n "${{ secrets.EDGE_PRODUCT_ID }}" ] && [ -n "${{ secrets.EDGE_CLIENT_ID }}" ] && [ -n "${{ secrets.EDGE_CLIENT_SECRET }}" ] && [ -n "${{ secrets.EDGE_ACCESS_TOKEN_URL }}" ]; then
+            echo "has_creds=true" >> $GITHUB_OUTPUT
+            echo "✅ Microsoft Edge secrets found."
+          else
+            echo "has_creds=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Microsoft Edge secrets not configured. Skipping automated upload."
+            echo "💡 Add secrets: EDGE_PRODUCT_ID, EDGE_CLIENT_ID, EDGE_CLIENT_SECRET, EDGE_ACCESS_TOKEN_URL"
+          fi
+
+      - name: Upload to Microsoft Edge Add-ons
+        if: steps.check-creds.outputs.has_creds == 'true'
+        uses: wenzeng/edge-addon-action@v1
+        with:
+          product-id: ${{ secrets.EDGE_PRODUCT_ID }}
+          client-id: ${{ secrets.EDGE_CLIENT_ID }}
+          client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
+          access-token-url: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
+          zip-path: ${{ needs.build-and-package.outputs.edge_zip }}

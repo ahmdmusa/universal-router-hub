@@ -1,0 +1,37 @@
+{
+  "name": "universal-router-hub",
+  "version": "1.0.0",
+  "description": "Universal Modern Dashboard & Router Controller for Chrome, Firefox, and Edge",
+  "main": "content.js",
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "build": "node scripts/package.js",
+    "package": "node scripts/package.js",
+    "bump:patch": "node scripts/bump-version.js patch",
+    "bump:minor": "node scripts/bump-version.js minor",
+    "bump:major": "node scripts/bump-version.js major",
+    "release": "node scripts/release.js"
+  },
+  "keywords": [
+    "router",
+    "dashboard",
+    "dlink",
+    "zte",
+    "huawei",
+    "tplink",
+    "egypt",
+    "chrome-extension",
+    "firefox-addon",
+    "edge-addon"
+  ],
+  "author": "ahmdmusa",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmdmusa/universal-router-hub.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmdmusa/universal-router-hub/issues"
+  },
+  "homepage": "https://github.com/ahmdmusa/universal-router-hub#readme"
+}

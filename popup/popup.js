@@ -12,17 +12,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     const storage = {
         get: async (key) => {
             if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-                return new Promise(r => chrome.storage.local.get(key, res => r(res[key])));
+                return new Promise(r => chrome.storage.local.get(key, res => r(res ? res[key] : null)));
             }
-            return localStorage.getItem(key);
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {
+                return null;
+            }
         },
         set: async (key, val) => {
             if (typeof chrome !== 'undefined' && chrome.storage?.local) {
                 return new Promise(r => chrome.storage.local.set({ [key]: val }, r));
             }
-            localStorage.setItem(key, val);
+            try {
+                localStorage.setItem(key, val);
+            } catch (e) {}
         }
     };
+
+    // Apply saved theme
+    const savedTheme = await storage.get('router_hub_theme') || 'dark';
+    document.body.className = `theme-${savedTheme}`;
 
     // Load saved settings
     const savedModel = await storage.get('router_selected_model') || 'auto';
@@ -36,8 +46,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (tabs && tabs[0] && tabs[0].url) {
                 const url = tabs[0].url;
                 if (url.includes('192.168.') || url.includes('10.0.0.')) {
-                    statusBadge.textContent = 'متصل بالراوتر';
-                    statusBadge.style.color = '#10b981';
+                    statusBadge.textContent = 'متصل';
+                    statusBadge.style.color = '#34c759';
                     try {
                         const host = new URL(url).hostname;
                         gatewayInput.value = host;
@@ -46,15 +56,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // Ask content script for detected brand
                     chrome.tabs.sendMessage(tabs[0].id, { type: 'GET_ROUTER_INFO' }, (response) => {
                         if (response && response.brand) {
-                            detectedInfo.textContent = `🎯 تم التعرف على: ${response.brand} (${response.model || 'تلقائي'})`;
-                            detectedInfo.style.color = '#38bdf8';
+                            detectedInfo.textContent = `تم التعرف على: ${response.brand} (${response.model || 'تلقائي'})`;
+                            detectedInfo.style.color = 'var(--apple-blue)';
                         } else {
                             detectedInfo.textContent = 'جاهز للتطبيق على صفحة الراوتر المفتوحة.';
                         }
                     });
                 } else {
                     statusBadge.textContent = 'غير متصل';
-                    statusBadge.style.color = '#f59e0b';
+                    statusBadge.style.color = '#ff9500';
                     detectedInfo.textContent = 'افتح صفحة الراوتر أولاً أو اضغط زر الفتح أدناه.';
                 }
             }
@@ -65,8 +75,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     modelSelect.addEventListener('change', async () => {
         await storage.set('router_selected_model', modelSelect.value);
         detectedInfo.textContent = modelSelect.value === 'auto' ? 
-            '✨ تم تفعيل الكشف التلقائي الذكي.' : 
-            `🔒 تم تثبيت الموديل: ${modelSelect.options[modelSelect.selectedIndex].text}`;
+            'تم تفعيل الكشف التلقائي الذكي.' : 
+            `تم اختيار الموديل: ${modelSelect.options[modelSelect.selectedIndex].text}`;
         
         // Notify tab
         if (typeof chrome !== 'undefined' && chrome.tabs) {
@@ -120,8 +130,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             let currentLang = await storage.get('router_hub_lang') || 'ar';
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             await storage.set('router_hub_lang', currentLang);
+            btnPopLang.textContent = currentLang === 'ar' ? 'EN' : 'عربي';
             sendTabAction('SET_LANG', { lang: currentLang });
-            alert(currentLang === 'ar' ? 'تم تحويل اللغة إلى العربية' : 'Switched to English');
         });
     }
 
@@ -131,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             let currentTheme = await storage.get('router_hub_theme') || 'dark';
             currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
             await storage.set('router_hub_theme', currentTheme);
-            btnPopTheme.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+            document.body.className = `theme-${currentTheme}`;
             sendTabAction('SET_THEME', { theme: currentTheme });
         });
     }

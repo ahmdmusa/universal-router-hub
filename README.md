@@ -1,6 +1,13 @@
 # 🌐 Universal Router Hub (NextGen Dashboard)
 ### الإضافة الموحدة للتحكم الذكي وتحديث واجهات راوترات مصر والشرق الأوسط
-**متوافقة مع: Google Chrome • Mozilla Firefox (PC) • Firefox for Android (Mobile)**
+**متوافقة مع: Google Chrome • Mozilla Firefox (PC & Android) • Microsoft Edge • Brave • Opera**
+
+[![CI Status](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/ci.yml)
+[![Release](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/release.yml/badge.svg)](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/ahmdmusa/universal-router-hub?color=success&include_prereleases)](https://github.com/ahmdmusa/universal-router-hub/releases)
+
+> 🚀 **دليل النشر التلقائي عبر المنصات والمتاجر:** راجع [`PUBLISHING_AUTOMATION.md`](PUBLISHING_AUTOMATION.md) للاطلاع على تفاصيل النشر السريع بضغطة زر واحدة إلى Chrome Web Store, Firefox AMO, Edge Add-ons, و GitHub Releases.
 
 ---
 

@@ -239,12 +239,28 @@ jobs:
             echo "💡 Add secrets: EDGE_PRODUCT_ID, EDGE_CLIENT_ID, EDGE_CLIENT_SECRET, EDGE_ACCESS_TOKEN_URL"
           fi
 
-      - name: Upload to Microsoft Edge Add-ons
+      - name: Upload & Publish to Microsoft Edge Add-ons
         if: steps.check-creds.outputs.has_creds == 'true'
-        uses: wenzeng/edge-addon-action@v1
-        with:
-          product-id: ${{ secrets.EDGE_PRODUCT_ID }}
-          client-id: ${{ secrets.EDGE_CLIENT_ID }}
-          client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
-          access-token-url: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
-          zip-path: ${{ needs.build-and-package.outputs.edge_zip }}
+        run: |
+          echo "Authenticating with Microsoft Edge Partner Center API..."
+          TOKEN=$(curl -s -X POST "${{ secrets.EDGE_ACCESS_TOKEN_URL }}" \
+            -d "client_id=${{ secrets.EDGE_CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.EDGE_CLIENT_SECRET }}" \
+            -d "grant_type=client_credentials" \
+            -d "resource=https://api.addons.microsoftedge.microsoft.com" | jq -r .access_token)
+          
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "❌ Failed to retrieve Microsoft Edge API Access Token."
+            exit 1
+          fi
+
+          echo "Uploading zip package..."
+          curl -s -f -X PUT -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@${{ needs.build-and-package.outputs.edge_zip }}" \
+            "https://api.addons.microsoftedge.microsoft.com/v1/products/${{ secrets.EDGE_PRODUCT_ID }}/submissions/draft/package"
+
+          echo "Publishing submission..."
+          curl -s -f -X POST -H "Authorization: Bearer $TOKEN" \
+            "https://api.addons.microsoftedge.microsoft.com/v1/products/${{ secrets.EDGE_PRODUCT_ID }}/submissions"
+          echo "✅ Successfully submitted to Microsoft Edge Add-ons!"

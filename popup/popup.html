@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Router Hub</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <!-- Header -->
+        <header class="popup-header">
+            <div class="header-brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div>
+                    <h1 id="pop-title">Universal Router Hub</h1>
+                    <p class="subtitle" id="pop-subtitle">الداشبورد الموحد لراوترات مصر</p>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+                <button class="icon-toggle-btn" id="btn-pop-lang" title="Switch Language / تغيير اللغة">🌐</button>
+                <button class="icon-toggle-btn" id="btn-pop-theme" title="Dark/Light Mode">🌙</button>
+                <span class="status-badge online" id="status-badge">نشط</span>
+            </div>
+        </header>
+
+        <!-- Router Profile Selector -->
+        <div class="section-box">
+            <label class="section-label" for="router-model-select">🔍 نوع وموديل الراوتر:</label>
+            <select class="custom-select" id="router-model-select">
+                <option value="auto" selected>✨ كشف تلقائي ذكي (Smart Auto-Detect)</option>
+                
+                <optgroup label="🚀 عائلة D-Link">
+                    <option value="dlink_245ge">D-Link DSL-245GE (المعدل - EcoNet EN7516)</option>
+                    <option value="dlink_224">D-Link DSL-224 (VDSL2)</option>
+                    <option value="dlink_124">D-Link DSL-124 (ADSL2+)</option>
+                    <option value="dlink_2750u">D-Link DSL-2750U (WE / مستقل)</option>
+                    <option value="dlink_dir825">D-Link DIR-825 (Gigabit Dual-Band)</option>
+                </optgroup>
+
+                <optgroup label="🔴 عائلة ZTE / المصرية للاتصالات WE">
+                    <option value="zte_h168n">ZTE ZXHN H168N (راوتر WE VDSL الأساسي)</option>
+                    <option value="zte_h188a">ZTE ZXHN H188A (SuperVectoring AC1200)</option>
+                    <option value="zte_h153">WE Air 5G (ZTE H153 Home Wireless)</option>
+                    <option value="zte_f601">ZTE F601 (Fiber ONT)</option>
+                    <option value="zte_h108n">ZTE ZXHN H108N (ADSL Legacy)</option>
+                </optgroup>
+
+                <optgroup label="🟢 عائلة Huawei / فودافون / أورنج">
+                    <option value="huawei_dg8045">Huawei DG8045 (راوتر WE VDSL)</option>
+                    <option value="huawei_hg630">Huawei HG630 V2 (VDSL2)</option>
+                    <option value="huawei_dn8245">Huawei DN8245V-56 (SuperVectoring)</option>
+                    <option value="huawei_hg8245h">Huawei HG8245H (WE FTTH الفايبر)</option>
+                    <option value="huawei_b311">Huawei B311 (Orange Home 4G)</option>
+                    <option value="huawei_b315">Huawei B315 (Orange / Vodafone 4G)</option>
+                </optgroup>
+
+                <optgroup label="⚡ عائلة TP-Link">
+                    <option value="tplink_c6">TP-Link Archer C6 (AC1200 Gigabit)</option>
+                    <option value="tplink_vr600">TP-Link Archer VR600 (VDSL AC1600)</option>
+                    <option value="tplink_vn020">TP-Link VN020-F3 (WE VDSL)</option>
+                    <option value="tplink_wr841n">TP-Link TL-WR841N (300Mbps N)</option>
+                    <option value="tplink_wr940n">TP-Link TL-WR940N (450Mbps N)</option>
+                </optgroup>
+
+                <optgroup label="📶 عائلة Tenda و Mercusys و ASUS">
+                    <option value="tenda_f3">Tenda F3 (300Mbps)</option>
+                    <option value="tenda_ac10">Tenda AC10 (AC1200 Gigabit)</option>
+                    <option value="mercusys_ac10">Mercusys AC10 (Dual-Band)</option>
+                    <option value="asus_ac1200">ASUS RT-AC1200 (ASUSWRT)</option>
+                </optgroup>
+            </select>
+            <p class="section-hint" id="detected-model-info">جارٍ فحص شبكة الراوتر...</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="actions-grid">
+            <button class="action-btn primary" id="btn-open-hub">
+                <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                <span>فتح الداشبورد الموحد</span>
+            </button>
+            <button class="action-btn family" id="btn-family-dns">
+                <span>🛡️ حماية الأسرة (حظر الإباحية والاحتيال)</span>
+            </button>
+            <button class="action-btn warning" id="btn-speed-limit">
+                <span>🐢 توفير الباقة (11B Only ~5Mbps)</span>
+            </button>
+            <button class="action-btn success" id="btn-full-speed">
+                <span>⚡ أقصى سرعة (11N/AC Full)</span>
+            </button>
+            <button class="action-btn danger" id="btn-reboot">
+                <span>⚡ إعادة تشغيل الراوتر (Reboot)</span>
+            </button>
+        </div>
+
+        <!-- Gateway IP Info -->
+        <div class="footer-info">
+            <span>عنوان الراوتر (Gateway):</span>
+            <input type="text" class="ip-input" id="gateway-ip" value="192.168.1.1">
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

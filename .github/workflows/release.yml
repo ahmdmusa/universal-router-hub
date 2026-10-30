@@ -145,8 +145,13 @@ jobs:
 
       - name: Check Chrome Web Store Credentials
         id: check-creds
+        env:
+          CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
         run: |
-          if [ -n "${{ secrets.CHROME_CLIENT_ID }}" ] && [ -n "${{ secrets.CHROME_CLIENT_SECRET }}" ] && [ -n "${{ secrets.CHROME_REFRESH_TOKEN }}" ] && [ -n "${{ secrets.CHROME_EXTENSION_ID }}" ]; then
+          if [ -n "$CHROME_CLIENT_ID" ] && [ -n "$CHROME_CLIENT_SECRET" ] && [ -n "$CHROME_REFRESH_TOKEN" ] && [ -n "$CHROME_EXTENSION_ID" ]; then
             echo "has_creds=true" >> $GITHUB_OUTPUT
             echo "✅ Chrome Web Store secrets found."
           else
@@ -188,12 +193,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Check Firefox AMO Credentials
         id: check-creds
+        env:
+          FIREFOX_API_KEY: ${{ secrets.FIREFOX_API_KEY }}
+          FIREFOX_API_SECRET: ${{ secrets.FIREFOX_API_SECRET }}
         run: |
-          if [ -n "${{ secrets.FIREFOX_API_KEY }}" ] && [ -n "${{ secrets.FIREFOX_API_SECRET }}" ]; then
+          if [ -n "$FIREFOX_API_KEY" ] && [ -n "$FIREFOX_API_SECRET" ]; then
             echo "has_creds=true" >> $GITHUB_OUTPUT
             echo "✅ Firefox AMO secrets found."
           else
@@ -229,8 +237,13 @@ jobs:
 
       - name: Check Microsoft Edge Credentials
         id: check-creds
+        env:
+          EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+          EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_CLIENT_SECRET }}
+          EDGE_ACCESS_TOKEN_URL: ${{ secrets.EDGE_ACCESS_TOKEN_URL }}
         run: |
-          if [ -n "${{ secrets.EDGE_PRODUCT_ID }}" ] && [ -n "${{ secrets.EDGE_CLIENT_ID }}" ] && [ -n "${{ secrets.EDGE_CLIENT_SECRET }}" ] && [ -n "${{ secrets.EDGE_ACCESS_TOKEN_URL }}" ]; then
+          if [ -n "$EDGE_PRODUCT_ID" ] && [ -n "$EDGE_CLIENT_ID" ] && [ -n "$EDGE_CLIENT_SECRET" ] && [ -n "$EDGE_ACCESS_TOKEN_URL" ]; then
             echo "has_creds=true" >> $GITHUB_OUTPUT
             echo "✅ Microsoft Edge secrets found."
           else

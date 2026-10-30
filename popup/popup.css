@@ -265,3 +265,37 @@ h1 {
 .ip-input:focus {
     border-color: var(--apple-blue);
 }
+
+.dev-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 11px;
+    padding-top: 2px;
+}
+
+.dev-link {
+    color: var(--apple-text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s;
+}
+.dev-link:hover {
+    color: var(--apple-text-primary);
+}
+
+.sep {
+    color: var(--apple-border);
+}
+
+.coffee-link {
+    color: var(--apple-blue);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s;
+}
+.coffee-link:hover {
+    color: var(--apple-blue-hover);
+    text-decoration: underline;
+}

@@ -1296,6 +1296,13 @@
                         ${isAr ? 'الواجهة الأصلية للراوتر' : 'Legacy Login'}
                     </button>
                 </div>
+
+                <!-- Support & Developer Footer -->
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 14px; font-size: calc(11px * var(--hub-font-scale)); color: var(--apple-text-tertiary);">
+                    <a href="https://github.com/ahmdmusa" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">GitHub @ahmdmusa</a>
+                    <span>•</span>
+                    <a href="https://www.paypal.com/ncp/payment/4SWPEP8Q3YF78" target="_blank" rel="noopener" style="color: var(--apple-blue); text-decoration: none; font-weight: 600;">☕ Buy me a coffee</a>
+                </div>
             </div>
         `;
 
@@ -1791,6 +1798,28 @@
                             <button class="apple-btn primary" style="width:100%;height:38px;" onclick="alert('تم حفظ قيمة الـ MTU');">
                                 ${isAr ? 'تطبيق قيمة MTU' : 'Apply MTU'}
                             </button>
+                        </div>
+
+                        <!-- Developer & Coffee Support Card -->
+                        <div class="apple-card full-width" style="background: linear-gradient(145deg, rgba(0, 113, 227, 0.08), rgba(88, 86, 214, 0.05)); border: 1px solid rgba(0, 113, 227, 0.25);">
+                            <div class="apple-card-header">
+                                <span class="apple-card-title">${Icons.user} ${isAr ? 'عن الأداة ودعم المطور' : 'About & Developer Support'}</span>
+                                <span class="apple-status-pill">v1.0.0</span>
+                            </div>
+                            <p style="font-size: calc(13px * var(--hub-font-scale)); color: var(--apple-text-secondary); line-height: 1.6; margin-bottom: 16px;">
+                                ${isAr ? 'مشروع مجاني ومفتوح المصدر طُوّر بواسطة Ahmed Musa لتوفير تحكم ذكي وسهل بجميع راوترات مصر والشرق الأوسط مع توفير الباقة وحماية الأسرة.' : 'Free & open-source extension built by Ahmed Musa to empower router users with intelligent controls, quota protection, and family DNS security.'}
+                            </p>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <a href="https://www.paypal.com/ncp/payment/4SWPEP8Q3YF78" target="_blank" rel="noopener" class="apple-btn primary" style="text-decoration: none;">
+                                    <span>☕ Buy Me a Coffee (PayPal)</span>
+                                </a>
+                                <a href="https://github.com/ahmdmusa" target="_blank" rel="noopener" class="apple-btn" style="text-decoration: none;">
+                                    <span>GitHub @ahmdmusa</span>
+                                </a>
+                                <a href="https://github.com/ahmdmusa/universal-router-hub" target="_blank" rel="noopener" class="apple-btn" style="text-decoration: none;">
+                                    <span>⭐ GitHub Repository</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

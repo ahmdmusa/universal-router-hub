@@ -5,9 +5,12 @@
 [![CI Status](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/ci.yml)
 [![Release](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/release.yml/badge.svg)](https://github.com/ahmdmusa/universal-router-hub/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GitHub Release](https://img.shields.io/github/v/release/ahmdmusa/universal-router-hub?color=success&include_prereleases)](https://github.com/ahmdmusa/universal-router-hub/releases)
+[![GitHub](https://img.shields.io/badge/GitHub-ahmdmusa-181717?logo=github)](https://github.com/ahmdmusa)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-PayPal-00457C?logo=paypal)](https://www.paypal.com/ncp/payment/4SWPEP8Q3YF78)
 
 > 🚀 **دليل النشر التلقائي عبر المنصات والمتاجر:** راجع [`PUBLISHING_AUTOMATION.md`](PUBLISHING_AUTOMATION.md) للاطلاع على تفاصيل النشر السريع بضغطة زر واحدة إلى Chrome Web Store, Firefox AMO, Edge Add-ons, و GitHub Releases.
+> 
+> ☕ **لدعم استمرار تطوير المشروع وتحديث الراوترات:** [Buy me a coffee عبر PayPal](https://www.paypal.com/ncp/payment/4SWPEP8Q3YF78) • مطور الأداة: [@ahmdmusa](https://github.com/ahmdmusa)
 
 ---
 
@@ -77,3 +80,17 @@
 
 ### 3. على متصفح Firefox Mobile (هواتف أندرويد):
 * متصفح Firefox Nightly أو Firefox Beta يدعم تشغيل الإضافات وتثبيتها مباشرة عبر ميزة Custom Add-on Collection أو من خلال تصدير ملف `.zip` للإضافة وتثبيته في المتصفح، لتستمتع بالداشبورد على هاتفك في أي مكان!
+
+---
+
+## ☕ دعم المشروع والمطور (Support & Donation)
+
+إذا ساعدك هذا المشروع في التحكم براوترك، توفير باقتك، وحماية عائلتك، يسعدنا جداً دعمك لاستمرار تحديث ودعم المزيد من الراوترات:
+
+- ☕ **Buy Me a Coffee (PayPal):**  
+  [https://www.paypal.com/ncp/payment/4SWPEP8Q3YF78](https://www.paypal.com/ncp/payment/4SWPEP8Q3YF78)
+- 🐙 **حساب المطور على GitHub:**  
+  [https://github.com/ahmdmusa](https://github.com/ahmdmusa)
+- ⭐ **المستودع الرسمي والمساهمات:**  
+  [https://github.com/ahmdmusa/universal-router-hub](https://github.com/ahmdmusa/universal-router-hub)
+
